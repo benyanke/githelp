@@ -8,9 +8,12 @@ class GitHelp:
     cliOptions = {
         'actions': [
             {
-                'name': 'newfeature',
-                'description': 'Create a new feature branch, with some safety checks',
-                'handlerFunction': 'featureBranchHandler',
+                'name':
+                'newfeature',
+                'description':
+                'Create a new feature branch, with some safety checks',
+                'handlerFunction':
+                'featureBranchHandler',
                 'flags': [
                     {
                         'shortForm': 't',
@@ -38,7 +41,6 @@ class GitHelp:
     def __init__(self):
         print("startup")
 
-
     def cliShowHelp(self):
         print("HELP PAGE")
 
@@ -52,7 +54,6 @@ class GitHelp:
 
         return None
 
-
     # Initial entrypoint for CLI usage
     def cliHandler(self, args):
 
@@ -65,7 +66,8 @@ class GitHelp:
             action = args[0]
             actionConfig = self.cliGetActionConfigByName(action)
             if actionConfig is None:
-                return self.showErr("The command '" + action + "' is not a valid command")
+                return self.showErr("The command '" + action +
+                                    "' is not a valid command")
 
         # Run the handler for the provided action
         getattr(self, actionConfig['handlerFunction'])(actionConfig)
@@ -85,9 +87,10 @@ class GitHelp:
         print("Invoking feature branch handler with options:")
         print(options)
 
-
+# Base function for shelling out to system
 # print(os.popen("git status").read())
 
+# Init handler
 if __name__ == '__main__':
 
     githelp = GitHelp()
@@ -98,4 +101,3 @@ if __name__ == '__main__':
 
     # Pass to the handler
     githelp.cliHandler(args)
-
