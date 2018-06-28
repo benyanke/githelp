@@ -10,7 +10,7 @@ class GitHelp:
             {
                 'name': 'newfeature',
                 'description': 'Create a new feature branch, with some safety checks',
-                'handlerFunction': self.featureBranchHandler,
+                'handlerFunction': 'featureBranchHandler',
                 'flags': [
                     {
                         'shortForm': 't',
@@ -38,9 +38,42 @@ class GitHelp:
     def __init__(self):
         print("startup")
 
+
+    def cliShowHelp(self):
+        print("HELP PAGE")
+
+    # Returns the full configuration by the action name
+    def cliGetActionConfigByName(self, actionName):
+
+        for x in self.cliOptions['actions']:
+            if x['name'] == actionName:
+                print("i found it! " + x['description'])
+                return x
+
+        return None
+
+
+    # Initial entrypoint for CLI usage
     def cliHandler(self, args):
-        print(args)
-        print(self.cliOptions)
+
+        # Display help info if no params are provided
+        if len(args) == 0:
+            return self.cliShowHelp()
+
+        # Get the config info for the provided action
+        else:
+            action = args[0]
+            actionConfig = self.cliGetActionConfigByName(action)
+            if actionConfig is None:
+                return self.showErr("The command '" + action + "' is not a valid command")
+
+        # Run the handler for the provided action
+        getattr(self, actionConfig['handlerFunction'])(actionConfig)
+
+    # Display an error, exit with exit code 1
+    def showErr(self, msg):
+        print("ERR: " + msg)
+        exit(1)
 
     def displayCount(self):
         print("Total Employee %d" % Employee.empCount)
@@ -49,7 +82,7 @@ class GitHelp:
         print("Name : ", self.name, ", Salary: ", self.salary)
 
     def featureBranchHandler(self, options):
-        print("Invoking handler function")
+        print("Invoking feature branch handler with options:")
         print(options)
 
 
