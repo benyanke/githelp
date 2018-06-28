@@ -8,12 +8,9 @@ class GitHelp:
     cliOptions = {
         'actions': [
             {
-                'name':
-                'newfeature',
-                'description':
-                'Create a new feature branch, with some safety checks',
-                'handlerFunction':
-                'featureBranchHandler',
+                'name': 'newfeature',
+                'description': 'Create a new feature branch, with some safety checks',
+                'handlerFunction': self.featureBranchHandler,
                 'flags': [
                     {
                         'shortForm': 't',
