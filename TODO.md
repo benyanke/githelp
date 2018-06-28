@@ -23,6 +23,8 @@ And under each action, an arrya of possible flags. Each flag has the following p
   - long form (--verbose)
   - description (for help)
   - isRequired (bool)
+  - val (set to 'required' | 'optional' | None)
+  - valName (name of the paramater, if exists - set to None for flags not accepting a paramater)
 
 And finally, a set of global flags, using the same params as above, except without the required option.
 
