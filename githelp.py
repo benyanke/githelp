@@ -87,6 +87,7 @@ class GitHelp:
         print("Invoking feature branch handler with options:")
         print(options)
 
+
 # Base function for shelling out to system
 # print(os.popen("git status").read())
 
