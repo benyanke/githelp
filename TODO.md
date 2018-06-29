@@ -29,6 +29,7 @@ And under each action, an arrya of possible flags. Each flag has the following p
 And finally, a set of global flags, using the same params as above, except without the required option.
 
 
+
 ### Git functions
 
 **Low Level git-call functions**

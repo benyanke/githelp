@@ -24,19 +24,28 @@ class GitHelp:
                         'shortForm': 't',
                         'longForm': 'ticket',
                         'description': 'Ticket number',
-                        'isRequired': True
+                        'isRequired': True,
+                        'val': 'required',
+                        'valName': 'tknum',
+                        'valExample': 'ba-123',
                     },
                     {
                         'shortForm': 'f',
                         'longForm': 'feature',
                         'description': 'Short feature description',
-                        'isRequired': True
+                        'isRequired': True,
+                        'val': 'required',
+                        'valName': 'featname',
+                        'valExample': 'bootstrap-upgrade',
                     },
                     {
                         'shortForm': 'v',
                         'longForm': 'verbose',
                         'description': 'Make output verbose',
-                        'isRequired': False
+                        'isRequired': False,
+                        'val': None,
+                        'valName': None,
+                        'valExample': None,
                     },
                 ]
             },
@@ -52,7 +61,10 @@ class GitHelp:
                         'shortForm': 'v',
                         'longForm': 'verbose',
                         'description': 'Make output verbose',
-                        'isRequired': False
+                        'isRequired': False,
+                        'val': None,
+                        'valName': None,
+                        'valExample': None,
                     },
                 ]
             },
@@ -74,7 +86,6 @@ class GitHelp:
         s += i['version'] + self.nl
         s += i['shortDesc'] + self.nl + self.nl
 
-        # s += "Commands available\n - listed with possible flags (including [optional] ones):"
         s += "Usage: " + i['name'] + " [command] --flag1 --flag2 --flag3=val"
         s += self.nl + self.nl
 
@@ -95,25 +106,27 @@ class GitHelp:
             for f in a['flags']:
                 s += "       "
 
-                if f['isRequired']:
-                    s += " "
-                else:
-                    s += "["
-
                 s += "-" + f['shortForm']
 
-                if f['isRequired']:
-                    s += "  |  "
-                else:
-                    s += "] | ["
+                if f['val'] == 'optional':
+                    s += " [<" + str(f['valName']) + ">]"
+                elif f['val'] == 'required':
+                    s += " <" + str(f['valName']) + "> "
 
-                s += "--" + f['longForm']
-                if f['isRequired']:
-                    s += " "
-                else:
-                    s += "]"
+
+                s += " [OR]"
+                s += " --" + f['longForm']
+
+                if f['val'] == 'optional':
+                    s += "[=<" + str(f['valName']) + ">]"
+                elif f['val'] == 'required':
+                    s += "=<" + str(f['valName']) + ">"
+
 
                 s += "\t  " + f['description']
+                if f['isRequired']:
+                    s += " (optional)"
+
                 s += self.nl
 
             if len(a['flags']) > 0:
