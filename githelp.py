@@ -101,7 +101,6 @@ class GitHelp:
             if len(a['flags']) > 0:
                 s += self.nl
 
-
             # Nicely display the possible flags
             for f in a['flags']:
                 s += "       "
@@ -113,7 +112,6 @@ class GitHelp:
                 elif f['val'] == 'required':
                     s += " <" + str(f['valName']) + "> "
 
-
                 s += " [OR]"
                 s += " --" + f['longForm']
 
@@ -121,7 +119,6 @@ class GitHelp:
                     s += "[=<" + str(f['valName']) + ">]"
                 elif f['val'] == 'required':
                     s += "=<" + str(f['valName']) + ">"
-
 
                 s += "\t  " + f['description']
                 if f['isRequired']:
@@ -134,7 +131,7 @@ class GitHelp:
 
 #            s += self.nl
 
-        # Output the help string
+# Output the help string
         print(s)
 
     # Returns the full configuration by the action name
@@ -167,7 +164,10 @@ class GitHelp:
 
     # Display an error, exit with exit code 1
     def showErr(self, msg):
-        print("ERR: " + msg)
+        print("ERROR: " + msg)
+        # print("Run '" + self.config['programInfo']['name'] + " --help' for more info" + self.nl)
+        print("Run '" + self.config['programInfo']['name'] +
+              "' with no arguments for more info" + self.nl)
         exit(1)
 
     def displayCount(self):
