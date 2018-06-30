@@ -89,7 +89,7 @@ class GitHelp:
         # self.cliValidateInput()
 
         # Pass to the handler
-        self.cliHandler(self.inputRaw)
+        self.cliHandler()
 
     # Parses the arguments into self.input
     def cliParseInput(self, args):
@@ -106,28 +106,51 @@ class GitHelp:
         except IndexError:
             self.input['command'] = None
 
-        # Parse flags - loop through the rest of the arguments
-        for i in range(len(args)):
-            print("Starting loop to parse flags")
+        self.input['flags'] = []
 
-            currentArg = args[i]
-            flaginfo = self.cliGetFlagInfo(self.input['command'], currentArg)
-            # self.input['flags'] = None
+        # Insert the flags on to the array
+        for i in range(len(args)):
+            # Will backtrack and insert the values later
+            self.input['flags'].append({'flag': args[i], 'value': None})
+
 
         print(self.input)
+
+        """
+            # Check if it's a flag
+            if currentArg.startswith("--") or currentArg.startswith("-"):
+                lastFlagHolder = i
+                flaginfo = self.cliGetFlagInfo(self.input['command'], currentArg)
+
+            # Or a value
+            else:
+                valueHolder.push(currentArg)
+                if len(valueHolder) > 1:
+                    self.showErr("Can not parse multiple values per flag")
+        """
+            # self.input['flags'] = None
+
 
     # Validates the configuration options set in self.config
     # Once implemented, run in the constructor
     def cliValidateConfig(self):
 
-        # implement me - check for all required keys in each action, as well as the overall structure
+        # implement me - check for all required keys in each
+        # action, as well as the overall structure
+        # also check to make sure each action has a handler
+        # function defined, and that function also exists
         if False:
             self.showErr("Invalid configuration")
 
     # Validates the configuration options set
     def cliValidateInput(self):
 
-        # implement me - check for all required keys in each action, as well as the overall structure
+        # implement me - check to ensure that
+        # 1) action provided is a valid action
+        # 2) all flags found are valid flags for the action
+        # 3) all required flags exist
+        # 4) all flags with a required value have a value
+        # 5) all flags with no value specified do not have one
         if False:
             self.showErr("Invalid configuration")
 
@@ -201,6 +224,9 @@ class GitHelp:
         # First, get the action configuration info, which contains the flags
         actionConfig = self.cliGetActionConfigByName(action)
 
+        if actionConfig == None:
+            return None
+
         for x in actionConfig:
             if "-" + x['shortForm'] == flagStr:
                 print("i found the flag (short)! " + x['description'])
@@ -212,18 +238,17 @@ class GitHelp:
         return None
 
     # Initial entrypoint for CLI usage
-    def cliHandler(self, args):
+    def cliHandler(self):
 
         # Display help info if no params are provided
-        if len(args) == 0:
+        if self.input['command'] == None:
             return self.cliShowHelp()
 
         # Get the config info for the provided action
         else:
-            action = args[0]
-            actionConfig = self.cliGetActionConfigByName(action)
+            actionConfig = self.cliGetActionConfigByName(self.input['command'])
             if actionConfig is None:
-                return self.showErr("The command '" + action +
+                return self.showErr("The command '" + self.input['command'] +
                                     "' is not a valid command")
 
         # Run the handler for the provided action
