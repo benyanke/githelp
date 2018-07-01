@@ -326,8 +326,7 @@ class GitHelp:
     """
     def fail(self, msg):
         print("Action failed: " + msg + self.nl)
-        # print("Run '" + self.config['programInfo']['name'] + " --help' for more info" + self.nl)
-        print("Please correct the error above and try again." + self.nl)
+        print("Please correct the error and try again." + self.nl)
         exit(1)
 
     def featureBranchHandler(self, options, flags):
@@ -377,7 +376,7 @@ class GitHelp:
             self.fail("Can not make branch with dirty working directory. Please look at 'git status' for uncommitted files and clean up before trying again.")
 
 
-        # If made to here, checks passed. Make the branchself.
+        # If made to here, checks passed. Make the branch.
         print("Making new feature branch at '" + branchName + "'.")
         os.popen("git checkout -b " + branchName).read()
 
