@@ -6,7 +6,8 @@ import sys, os
 class GitHelp:
     'Git CLI helper for developers'
 
-    DEBUG = True
+    # DEBUG = True
+    DEBUG = False
 
     input = {}
     inputRaw = {}
@@ -154,19 +155,23 @@ class GitHelp:
         # 4) all flags with a required value have a value
         # 5) all flags with no value specified do not have one
 
-        # check for action
+        # If no command is set, exit validation - this
+        # is when we display help screen.
+        if self.input['command'] == None:
+            return
+
+        # Check to ensure a valid command
         if not self.cliDoesActionExist(self.input['command']):
             self.showErr("'" + self.input['command'] + "' is not a valid command.")
 
-        """
         for f in self.input['flags']:
-            if not self.cliDoesFlagExist(self.input['command'], f):
-                self.showErr("'" + self.input['command'] + "' is not a valid command.")
-        """
 
-
-        if False:
-            self.showErr("Invalid configuration")
+            print("Validating flag '" + str(f['flag']) + "'")
+            if self.cliDoesFlagExist(self.input['command'], str(f['flag'])):
+                if self.DEBUG:
+                    print("Flag " + str(f['flag']) + " is valid")
+            else:
+                self.showErr("'" + f['flag'] + "' is not a valid flag for this command")
 
 
     def cliShowHelp(self):
@@ -260,12 +265,14 @@ class GitHelp:
         if actionConfig == None:
             return None
 
-        for x in actionConfig:
-            if "-" + x['shortForm'] == flagStr:
+
+        for x in actionConfig['flags']:
+
+            if "-" + x['shortForm'] == flagstr:
                 if self.DEBUG:
                     print("i found the flag (short)! " + x['description'])
                 return x
-            elif "--" + x['longForm'] == flagStr:
+            elif "--" + x['longForm'] == flagstr:
                 if self.DEBUG:
                     print("i found the flag (long)! " + x['description'])
                 return x
