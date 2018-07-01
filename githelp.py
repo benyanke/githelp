@@ -112,7 +112,6 @@ class GitHelp:
         if self.DEBUG:
             print("Parsed input:\n" + str(self.input))
 
-
     def cliValidateConfig(self):
         """" Validates the configuration options set in self.config
         Once implemented, run in the constructor
@@ -308,11 +307,48 @@ class GitHelp:
               "' with no arguments for more info" + self.nl)
         exit(1)
 
-    def featureBranchHandler(self, options, flags):
-        print("Invoking feature branch handler with options:")
-        print(options)
-        print(flags)
+    """
+    DON'T EDIT FUNCTIONS ABOVE HERE - these are the CLI famework
 
+    Below here is where all the custom functions are placed, such as handlers
+    and helpers.
+
+    """
+
+    def featureBranchHandler(self, options, flags):
+
+
+        charLimit=30
+
+        # Parse out fields
+        ticketNum = ''
+        feature = ''
+        verbose = False
+
+        for f in flags:
+            if f['flag'] == "-t" or f['flag'] == "--ticket":
+                ticketNum = f['value'].lower()
+
+            if f['flag'] == "-f" or f['flag'] == "--feature":
+                feature = f['value'].lower().replace(" ", "-")
+
+
+            if f['flag'] == "-v" or f['flag'] == "--verbose":
+                verbose = True
+
+
+        # Check length
+        if len(feature) > charLimit:
+            self.showErr("Feature string is " + str(len(feature) - charLimit) + " characters too long. Please shorten.")
+
+        branchName = "feature/" + ticketNum + "-" + feature
+        if self.DEBUG:
+            print("Branch name found: " + branchName)
+
+        # Check if git directory is clean
+        gitStatus = os.popen("git status --porcelain").read()
+
+        print(gitStatus)
 
 # Base function for shelling out to system
 # print(os.popen("git status").read())
