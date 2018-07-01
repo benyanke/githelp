@@ -56,25 +56,6 @@ class GitHelp:
                     },
                 ]
             },
-            {
-                'name':
-                'status',
-                'description':
-                'Run git status',
-                'handlerFunction':
-                'gitStatusHandler',
-                'flags': [
-                    {
-                        'shortForm': 'v',
-                        'longForm': 'verbose',
-                        'description': 'Make output verbose',
-                        'isRequired': False,
-                        'val': None,
-                        'valName': None,
-                        'valExample': None,
-                    },
-                ]
-            },
         ],
     }
 
@@ -337,9 +318,6 @@ class GitHelp:
         print("Invoking feature branch handler with options:")
         print(options)
 
-
-    def gitStatusHandler(self, options, flags):
-        print("Git status")
 
 # Base function for shelling out to system
 # print(os.popen("git status").read())
