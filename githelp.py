@@ -308,15 +308,10 @@ class GitHelp:
               "' with no arguments for more info" + self.nl)
         exit(1)
 
-    def displayCount(self):
-        print("Total Employee %d" % Employee.empCount)
-
-    def displayEmployee(self):
-        print("Name : ", self.name, ", Salary: ", self.salary)
-
     def featureBranchHandler(self, options, flags):
         print("Invoking feature branch handler with options:")
         print(options)
+        print(flags)
 
 
 # Base function for shelling out to system
