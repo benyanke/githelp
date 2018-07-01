@@ -314,11 +314,17 @@ class GitHelp:
     and helpers.
 
     """
+    def fail(self, msg):
+        print("Action failed: " + msg + self.nl)
+        # print("Run '" + self.config['programInfo']['name'] + " --help' for more info" + self.nl)
+        print("Please correct the error above and try again." + self.nl)
+        exit(1)
 
     def featureBranchHandler(self, options, flags):
 
-
+        # Update settings here
         charLimit=30
+        requiredBaseBranch="develop"
 
         # Parse out fields
         ticketNum = ''
@@ -339,17 +345,30 @@ class GitHelp:
 
         # Check length
         if len(feature) > charLimit:
-            self.showErr("Feature string is " + str(len(feature) - charLimit) + " characters too long. Please shorten.")
+            self.fail("Feature string is " + str(len(feature) - charLimit) + " characters too long. Please shorten.")
 
         branchName = "feature/" + ticketNum + "-" + feature
         if self.DEBUG:
             print("Branch name found: " + branchName)
 
+        # Check if on the right branch
+        # gitBranch = os.popen("git branch | grep \* | cut -d ' ' -f2").read()
+        gitBranch = os.popen("git rev-parse --abbrev-ref HEAD").read().rstrip()
+
+
+        if requiredBaseBranch != gitBranch:
+            self.fail("You must start by basing your new branch off '" + requiredBaseBranch + "'. You are currently on '" + gitBranch + "'. Please switch branches and try again.")
+
         # Check if git directory is clean
         gitStatus = os.popen("git status --porcelain").read()
 
         if len(gitStatus) > 0:
-            self.showErr("Can not make branch with dirty working directory. Please look at 'git status' for uncommitted files")
+            self.fail("Can not make branch with dirty working directory. Please look at 'git status' for uncommitted files and clean up before trying again.")
+
+
+        # If made to here, checks passed. Make the branchself.
+        print("Making new feature branch at '" + branchName + "'.")
+        os.popen("git checkout -b " + branchName).read()
 
 # Base function for shelling out to system
 # print(os.popen("git status").read())
