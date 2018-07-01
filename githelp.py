@@ -239,7 +239,7 @@ class GitHelp:
                     s += "=<" + str(f['valName']) + ">"
 
                 s += "\t  " + f['description']
-                if f['isRequired']:
+                if not f['isRequired']:
                     s += " (optional)"
 
                 s += self.nl
