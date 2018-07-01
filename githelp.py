@@ -164,14 +164,33 @@ class GitHelp:
         if not self.cliDoesActionExist(self.input['command']):
             self.showErr("'" + self.input['command'] + "' is not a valid command.")
 
+        # Ensure all flags are valid for the provided command
         for f in self.input['flags']:
+            if self.DEBUG:
+                print("Validating flag '" + str(f['flag']) + "'")
 
-            print("Validating flag '" + str(f['flag']) + "'")
             if self.cliDoesFlagExist(self.input['command'], str(f['flag'])):
                 if self.DEBUG:
                     print("Flag " + str(f['flag']) + " is valid")
             else:
                 self.showErr("'" + f['flag'] + "' is not a valid flag for this command")
+
+        # Ensure all required flags have been set
+        flagsForCurrentCommand = self.cliGetActionConfigByName(self.input['command'])['flags']
+        flagsInInput = [o['flag'] for o in self.input['flags']]
+
+        # Loop through all possible flags for the command
+        for f in flagsForCurrentCommand:
+            # Only check the required ones
+            if f['isRequired']:
+                # Check if the flag is in the input
+                if "-" + f['shortForm'] in flagsInInput or "--" + f['longForm'] in flagsInInput:
+                    if self.DEBUG:
+                        print("Required flag '" + str(f['shortForm']) + "' was found")
+                else:
+                    self.showErr("The flag '--" + f['longForm'] + " | -" + f['shortForm'] + "' is a required option. Please add the flag before continuing.")
+
+        # TODO - add validation with flag['val'] = required/optional/null.
 
 
     def cliShowHelp(self):
@@ -302,7 +321,7 @@ class GitHelp:
         """Display an error, exit with exit code 1
         """
 
-        print("ERROR: " + msg)
+        print("ERROR: " + msg + self.nl)
         # print("Run '" + self.config['programInfo']['name'] + " --help' for more info" + self.nl)
         print("Run '" + self.config['programInfo']['name'] +
               "' with no arguments for more info" + self.nl)
