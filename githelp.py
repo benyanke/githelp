@@ -315,7 +315,7 @@ class GitHelp:
                                     "' is not a valid command")
 
         # Run the handler for the provided action
-        getattr(self, actionConfig['handlerFunction'])(actionConfig)
+        getattr(self, actionConfig['handlerFunction'])(actionConfig, self.input['flags'])
 
     def showErr(self, msg):
         """Display an error, exit with exit code 1
@@ -333,10 +333,13 @@ class GitHelp:
     def displayEmployee(self):
         print("Name : ", self.name, ", Salary: ", self.salary)
 
-    def featureBranchHandler(self, options):
+    def featureBranchHandler(self, options, flags):
         print("Invoking feature branch handler with options:")
         print(options)
 
+
+    def gitStatusHandler(self, options, flags):
+        print("Git status")
 
 # Base function for shelling out to system
 # print(os.popen("git status").read())
