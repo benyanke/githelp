@@ -6,7 +6,6 @@ import sys, os
 class GitHelp:
     'Git CLI helper for developers'
 
-    # DEBUG = True
     DEBUG = False
 
     input = {}
@@ -98,11 +97,22 @@ class GitHelp:
         for i in range(len(args)):
 
             # Will backtrack and insert the values later
-            if args[i].startswith("--") or args[i].startswith("-"):
+            if args[i].startswith("--"):
+
+                splitArg = args[i].split("=")
+
+                try:
+                    self.input['flags'].append({'flag': splitArg[0], 'value': splitArg[1]})
+                except IndexError:
+                    self.input['flags'].append({'flag': splitArg[0], 'value': None})
+
+            elif args[i].startswith("-"):
                 self.input['flags'].append({'flag': args[i], 'value': None})
-            elif args[i-1].startswith("--") or args[i-1].startswith("-"):
+
+            elif args[i-1].startswith("-") and not args[i-1].startswith("--"):
                 lastFlag = self.input['flags'].pop()
                 self.input['flags'].append({'flag': lastFlag['flag'], 'value': args[i]})
+
             else:
                 if self.DEBUG:
                     print("PARSE ERROR")
@@ -336,7 +346,7 @@ class GitHelp:
             if f['flag'] == "-t" or f['flag'] == "--ticket":
                 ticketNum = f['value'].lower()
 
-            if f['flag'] == "-f" or f['flag'] == "--feature":
+            if (f['flag'] == "-f" or f['flag'] == "--feature") and not f['value'] == None:
                 feature = f['value'].lower().replace(" ", "-")
 
             if f['flag'] == "-v" or f['flag'] == "--verbose":
