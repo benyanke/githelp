@@ -326,11 +326,12 @@ class GitHelp:
         charLimit=30
         requiredBaseBranch="develop"
 
-        # Parse out fields
+        # Parse out fields from CLI input - initialize them first
         ticketNum = ''
         feature = ''
         verbose = False
 
+        # Loop through inputs to grab the data we want
         for f in flags:
             if f['flag'] == "-t" or f['flag'] == "--ticket":
                 ticketNum = f['value'].lower()
@@ -338,10 +339,8 @@ class GitHelp:
             if f['flag'] == "-f" or f['flag'] == "--feature":
                 feature = f['value'].lower().replace(" ", "-")
 
-
             if f['flag'] == "-v" or f['flag'] == "--verbose":
                 verbose = True
-
 
         # Check length
         if len(feature) > charLimit:
@@ -352,15 +351,17 @@ class GitHelp:
             print("Branch name found: " + branchName)
 
         # Check if on the right branch
-        # gitBranch = os.popen("git branch | grep \* | cut -d ' ' -f2").read()
         gitBranch = os.popen("git rev-parse --abbrev-ref HEAD").read().rstrip()
 
+        if verbose:
+            print("Currently on " + gitBranch)
 
         if requiredBaseBranch != gitBranch:
             self.fail("You must start by basing your new branch off '" + requiredBaseBranch + "'. You are currently on '" + gitBranch + "'. Please switch branches and try again.")
 
         # Check if git directory is clean
         gitStatus = os.popen("git status --porcelain").read()
+
 
         if len(gitStatus) > 0:
             self.fail("Can not make branch with dirty working directory. Please look at 'git status' for uncommitted files and clean up before trying again.")
