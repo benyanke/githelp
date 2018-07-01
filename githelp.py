@@ -348,7 +348,8 @@ class GitHelp:
         # Check if git directory is clean
         gitStatus = os.popen("git status --porcelain").read()
 
-        print(len(gitStatus))
+        if len(gitStatus) > 0:
+            self.showErr("Can not make branch with dirty working directory. Please look at 'git status' for uncommitted files")
 
 # Base function for shelling out to system
 # print(os.popen("git status").read())
