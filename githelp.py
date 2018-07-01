@@ -371,8 +371,6 @@ class GitHelp:
         print("Making new feature branch at '" + branchName + "'.")
         os.popen("git checkout -b " + branchName).read()
 
-# Base function for shelling out to system
-# print(os.popen("git status").read())
 
 # Init handler
 if __name__ == '__main__':
