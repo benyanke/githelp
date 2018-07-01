@@ -348,7 +348,7 @@ class GitHelp:
         # Check if git directory is clean
         gitStatus = os.popen("git status --porcelain").read()
 
-        print(gitStatus)
+        print(len(gitStatus))
 
 # Base function for shelling out to system
 # print(os.popen("git status").read())
