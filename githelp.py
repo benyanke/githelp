@@ -243,7 +243,7 @@ class GitHelp:
 
 
             # Generate an example usage for this action
-            s += "       Example usage: " + self.nl
+            s += "       Example usage of command [" + a['name'] + "] : " + self.nl
 
             s += "          " + i['name'] + " " + a['name']
             for f in a['flags']:
