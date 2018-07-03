@@ -13,7 +13,7 @@ class GitHelp:
 
     config = {
         'programInfo': {
-            'name': 'githelp',
+            'name': 'githelp.py',
             'version': 'v0.0.1',
             'shortDesc': 'Git CLI helper for developers',
         },
@@ -236,6 +236,26 @@ class GitHelp:
 
             if len(a['flags']) > 0:
                 s += self.nl
+
+
+            # Generate an example usage for this action
+            s += "       Example usage: " + self.nl
+
+            s += "          " + i['name'] + " " + a['name']
+            for f in a['flags']:
+                if f['isRequired']:
+                    s += " -" + f['shortForm']
+                    if f['val'] == 'required':
+                        s += " " + f['valExample']
+            s += self.nl
+            s += "          " + i['name'] + " " + a['name']
+            for f in a['flags']:
+                if f['isRequired']:
+                    s += " --" + f['longForm']
+                    if f['val'] == 'required':
+                        s += "=" + f['valExample']
+            s += self.nl
+
         # Output the help string
         print(s)
 
