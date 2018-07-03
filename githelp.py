@@ -2,6 +2,10 @@
 
 import sys, os
 
+# Git helper for developers
+#
+# Instructions: run the script with no arguments
+# for examples of usage and features
 
 class GitHelp:
     'Git CLI helper for developers'
